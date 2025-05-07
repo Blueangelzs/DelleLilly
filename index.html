@@ -16,17 +16,19 @@
 </head>
 <body>
   <div id="nav">
-    <button onclick="showScreen('home')">Home</button>
+    <button onclick="showScreen('home')">Professor Blars</button>
     <button onclick="showScreen('maps')">Spawn Maps</button>
     <button onclick="showScreen('dex')">Dex</button>
+    <button onclick="showScreen('achievements')">Achievements</button>
   </div>
 
   <div id="main">
     <div id="home" class="active">
-      <h2>Welcome to Spinda Collector</h2>
+      <h2>Professor Blars' Lab</h2>
+      <p>Welcome back, Trainer!</p>
       <p>XP: <span id="xp">0</span></p>
-      <p>Collected Spinda: <span id="collection-count">0</span></p>
-      <div id="collection"></div>
+      <p>Total Spinda Collected: <span id="collection-count">0</span></p>
+      <p>Unique Spinda Found: <span id="dex-count">0</span></p>
     </div>
 
     <div id="maps">
@@ -34,12 +36,23 @@
       <p>Click the map to try and catch a Spinda!</p>
       <img src="map1.png" alt="Map 1" class="map-image" onclick="tryCatch()">
       <p>XP per click: 1 | XP per catch: 5</p>
+      <div id="collection"></div>
     </div>
 
     <div id="dex">
       <h2>Spinda Dex</h2>
       <p>Total unique Spinda: <span id="dex-count">0</span></p>
       <div id="dex-list"></div>
+    </div>
+
+    <div id="achievements">
+      <h2>Achievements</h2>
+      <ul>
+        <li>Catch 1 Spinda</li>
+        <li>Catch 10 Spinda</li>
+        <li>Reach 50 XP</li>
+        <li>Complete 100% of Dex (future)</li>
+      </ul>
     </div>
   </div>
 
@@ -63,11 +76,11 @@
 
     function tryCatch() {
       xp += 1;
-      if (Math.random() < 0.5) { // 50% chance to catch
+      if (Math.random() < 0.5) {
         const caught = spindaPool[Math.floor(Math.random() * spindaPool.length)];
         collection.push(caught);
         if (!dex.includes(caught)) dex.push(caught);
-        xp += 4; // bonus XP
+        xp += 4;
       }
       saveData();
       updateUI();
@@ -76,15 +89,18 @@
     function updateUI() {
       document.getElementById("xp").textContent = xp;
       document.getElementById("collection-count").textContent = collection.length;
+      document.getElementById("dex-count").textContent = dex.length;
 
       const collectionDiv = document.getElementById("collection");
-      collectionDiv.innerHTML = "";
-      collection.forEach(img => {
-        const el = document.createElement("img");
-        el.src = img;
-        el.className = "spinda-img";
-        collectionDiv.appendChild(el);
-      });
+      if (collectionDiv) {
+        collectionDiv.innerHTML = "";
+        collection.forEach(img => {
+          const el = document.createElement("img");
+          el.src = img;
+          el.className = "spinda-img";
+          collectionDiv.appendChild(el);
+        });
+      }
 
       const dexDiv = document.getElementById("dex-list");
       dexDiv.innerHTML = "";
@@ -94,8 +110,6 @@
         el.className = "spinda-img";
         dexDiv.appendChild(el);
       });
-
-      document.getElementById("dex-count").textContent = dex.length;
     }
 
     updateUI();
