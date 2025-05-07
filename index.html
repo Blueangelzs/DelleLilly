@@ -34,7 +34,7 @@
     <div id="maps">
       <h2>Spawn Zone 1</h2>
       <p>Click the map to try and catch a Spinda!</p>
-      <img src="map1.png" alt="Map 1" class="map-image" onclick="tryCatch()">
+      <img src="https://raw.githubusercontent.com/Blueangelzs/DelleLilly/main/map1.png" alt="Map 1" class="map-image" onclick="tryCatch()">
       <p>XP per click: 1 | XP per catch: 5</p>
       <div id="collection"></div>
     </div>
@@ -57,7 +57,12 @@
   </div>
 
   <script>
-    const spindaPool = ["spinda1.png", "spinda2.png", "spinda3.png"];
+    const spindaPool = [
+      "https://raw.githubusercontent.com/Blueangelzs/DelleLilly/main/spinda1.png",
+      "https://raw.githubusercontent.com/Blueangelzs/DelleLilly/main/spinda2.png",
+      "https://raw.githubusercontent.com/Blueangelzs/DelleLilly/main/spinda3.png"
+    ];
+
     let xp = parseInt(localStorage.getItem("xp")) || 0;
     let collection = JSON.parse(localStorage.getItem("collection")) || [];
     let dex = JSON.parse(localStorage.getItem("dex")) || [];
@@ -112,7 +117,10 @@
       });
     }
 
-    updateUI();
+    document.addEventListener("DOMContentLoaded", () => {
+      showScreen('home');
+      updateUI();
+    });
   </script>
 </body>
 </html>
