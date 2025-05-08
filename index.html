@@ -71,11 +71,16 @@
       localStorage.setItem("dex", JSON.stringify(dex));
     }
 
-function showScreen(screenId) {
-  console.log("Switching to screen:", screenId);
+    function showScreen(screenId) {
+      console.log("Switching to screen:", screenId);
       document.querySelectorAll("#main > div").forEach(div => div.classList.remove("active"));
-      document.getElementById(screenId).classList.add("active");
-      updateUI();
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add("active");
+        updateUI();
+      } else {
+        console.warn("No screen found with ID:", screenId);
+      }
     }
 
     function tryCatch() {
@@ -107,13 +112,15 @@ function showScreen(screenId) {
       }
 
       const dexDiv = document.getElementById("dex-list");
-      dexDiv.innerHTML = "";
-      dex.forEach(img => {
-        const el = document.createElement("img");
-        el.src = img;
-        el.className = "spinda-img";
-        dexDiv.appendChild(el);
-      });
+      if (dexDiv) {
+        dexDiv.innerHTML = "";
+        dex.forEach(img => {
+          const el = document.createElement("img");
+          el.src = img;
+          el.className = "spinda-img";
+          dexDiv.appendChild(el);
+        });
+      }
     }
 
     window.onload = () => {
