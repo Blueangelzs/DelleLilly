@@ -71,7 +71,8 @@
       localStorage.setItem("dex", JSON.stringify(dex));
     }
 
-    function showScreen(screenId) {
+function showScreen(screenId) {
+  console.log("Switching to screen:", screenId);
       document.querySelectorAll("#main > div").forEach(div => div.classList.remove("active"));
       document.getElementById(screenId).classList.add("active");
       updateUI();
