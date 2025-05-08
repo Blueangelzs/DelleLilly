@@ -9,7 +9,7 @@
     #nav { display: flex; justify-content: space-around; background: #222; color: #fff; padding: 10px; }
     #nav button { background: #444; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
     #main > div { display: none; padding: 20px; }
-    #main > div.active { display: block; }
+    .active { display: block; }
     .map-image { width: 100%; max-width: 400px; cursor: pointer; }
     .spinda-img { width: 60px; height: auto; margin: 5px; }
   </style>
@@ -26,10 +26,10 @@
     <div id="home" class="active">
       <h2>Professor Blars' Lab</h2>
       <p>Welcome back, Trainer!</p>
+      <p>XP: <span id="xp">0</span></p>
       <p>Level: <span id="level">1</span></p>
       <p>Total Spinda Collected: <span id="collection-count">0</span></p>
       <p>Unique Spinda Found: <span id="dex-count">0</span></p>
-      <button onclick="resetProgress()">Reset Progress</button>
     </div>
 
     <div id="maps">
@@ -59,7 +59,7 @@
 
   <script>
     const spindaPool = [
-      "https://raw.githubusercontent.com/Blueangelzs/DelleLilly/refs/heads/main/images/spinda/spinda1.1.png"
+      https://raw.githubusercontent.com/Blueangelzs/DelleLilly/refs/heads/main/images/spinda/spinda1.1.png
     ];
 
     let xp = parseInt(localStorage.getItem("xp")) || 0;
@@ -72,16 +72,22 @@
       localStorage.setItem("dex", JSON.stringify(dex));
     }
 
-    function showScreen(screenId) {
-      console.log("Switching to screen:", screenId);
-      document.querySelectorAll("#main > div").forEach(div => div.classList.remove("active"));
-      const target = document.getElementById(screenId);
-      if (target) {
-        target.classList.add("active");
-        updateUI();
-      } else {
-        console.warn("No screen found with ID:", screenId);
+    function calculateLevel(xp) {
+      let baseXP = 20000;
+      let multiplier = 2;
+      let level = 1;
+      let required = 0;
+      while (xp >= required) {
+        level++;
+        required = baseXP * Math.pow(multiplier, level - 2);
       }
+      return level - 1;
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll("#main > div").forEach(div => div.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+      updateUI();
     }
 
     function tryCatch() {
@@ -97,8 +103,9 @@
     }
 
     function updateUI() {
-      level = calculateLevel(xp);
+      let level = calculateLevel(xp);
       document.getElementById("level").textContent = level;
+
       document.getElementById("xp").textContent = xp;
       document.getElementById("collection-count").textContent = collection.length;
       document.getElementById("dex-count").textContent = dex.length;
@@ -115,15 +122,13 @@
       }
 
       const dexDiv = document.getElementById("dex-list");
-      if (dexDiv) {
-        dexDiv.innerHTML = "";
-        dex.forEach(img => {
-          const el = document.createElement("img");
-          el.src = img;
-          el.className = "spinda-img";
-          dexDiv.appendChild(el);
-        });
-      }
+      dexDiv.innerHTML = "";
+      dex.forEach(img => {
+        const el = document.createElement("img");
+        el.src = img;
+        el.className = "spinda-img";
+        dexDiv.appendChild(el);
+      });
     }
 
     window.onload = () => {
@@ -136,36 +141,6 @@
 
       showScreen('home');
     };
-
-    let level = 1;
-const baseXP = 20000;
-const multiplier = 2;
-
-function calculateLevel(xp) {
-  if (xp < baseXP) return 1;
-
-  let lvl = 2;
-  let requiredXP = baseXP;
-
-  while (xp >= requiredXP) {
-    requiredXP += baseXP * Math.pow(multiplier, lvl - 2);
-    lvl++;
-  }
-  return lvl - 1;
-}
-
-    function resetProgress() {
-  if (confirm("Are you sure you want to reset all progress?")) {
-    localStorage.clear();
-    xp = 0;
-    collection = [];
-    dex = [];
-    level = 1;
-    updateUI();
-    alert("Progress has been reset.");
-  }
-}
-
   </script>
 </body>
 </html>
