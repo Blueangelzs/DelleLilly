@@ -108,7 +108,7 @@
 
       document.getElementById("xp").textContent = xp;
       document.getElementById("collection-count").textContent = collection.length;
-      document.getElementById("dex-count").textContent = dex.length;
+      document.querySelectorAll("#dex-count").forEach(el => el.textContent = dex.length);
 
       const collectionDiv = document.getElementById("collection");
       if (collectionDiv) {
