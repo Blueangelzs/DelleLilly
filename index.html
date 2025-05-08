@@ -20,6 +20,7 @@
     <button data-screen="maps">Spawn Maps</button>
     <button data-screen="dex">Dex</button>
     <button data-screen="achievements">Achievements</button>
+    <button onclick="resetProgress()">Reset</button>
   </div>
 
   <div id="main">
@@ -70,6 +71,16 @@
       localStorage.setItem("xp", xp);
       localStorage.setItem("collection", JSON.stringify(collection));
       localStorage.setItem("dex", JSON.stringify(dex));
+    }
+
+    function resetProgress() {
+      if (confirm("Are you sure you want to reset all progress?")) {
+        localStorage.clear();
+        xp = 0;
+        collection = [];
+        dex = [];
+        updateUI();
+      }
     }
 
     function calculateLevel(xp) {
@@ -133,10 +144,10 @@
 
     window.onload = () => {
       document.querySelectorAll("#nav button").forEach(button => {
-        button.addEventListener("click", () => {
-          const screen = button.getAttribute("data-screen");
-          showScreen(screen);
-        });
+        const screen = button.getAttribute("data-screen");
+        if (screen) {
+          button.addEventListener("click", () => showScreen(screen));
+        }
       });
 
       showScreen('home');
