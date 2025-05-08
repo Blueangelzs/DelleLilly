@@ -26,9 +26,10 @@
     <div id="home" class="active">
       <h2>Professor Blars' Lab</h2>
       <p>Welcome back, Trainer!</p>
-      <p>XP: <span id="xp">0</span></p>
+      <p>Level: <span id="level">1</span></p>
       <p>Total Spinda Collected: <span id="collection-count">0</span></p>
       <p>Unique Spinda Found: <span id="dex-count">0</span></p>
+      <button onclick="resetProgress()">Reset Progress</button>
     </div>
 
     <div id="maps">
@@ -92,7 +93,9 @@
         xp += 4;
       }
       saveData();
-      updateUI();
+      updateUI(level = calculateLevel(xp);
+document.getElementById("level").textContent = level;
+);
     }
 
     function updateUI() {
@@ -133,6 +136,36 @@
 
       showScreen('home');
     };
+
+    let level = 1;
+const baseXP = 20000;
+const multiplier = 2;
+
+function calculateLevel(xp) {
+  if (xp < baseXP) return 1;
+
+  let lvl = 2;
+  let requiredXP = baseXP;
+
+  while (xp >= requiredXP) {
+    requiredXP += baseXP * Math.pow(multiplier, lvl - 2);
+    lvl++;
+  }
+  return lvl - 1;
+}
+
+    function resetProgress() {
+  if (confirm("Are you sure you want to reset all progress?")) {
+    localStorage.clear();
+    xp = 0;
+    collection = [];
+    dex = [];
+    level = 1;
+    updateUI();
+    alert("Progress has been reset.");
+  }
+}
+
   </script>
 </body>
 </html>
