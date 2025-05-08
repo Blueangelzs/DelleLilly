@@ -93,12 +93,13 @@
         xp += 4;
       }
       saveData();
-      updateUI(level = calculateLevel(xp);
-document.getElementById("level").textContent = level;
-      );
+      updateUI();
     }
 
     function updateUI() {
+      level = calculateLevel(xp);
+      document.getElementById("level").textContent = level;
+      
       document.getElementById("xp").textContent = xp;
       document.getElementById("collection-count").textContent = collection.length;
       document.getElementById("dex-count").textContent = dex.length;
